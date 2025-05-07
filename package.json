@@ -1,0 +1,31 @@
+{
+  "name": "sahabat-tani",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "migrate": "node-pg-migrate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hapi/hapi": "^21.4.0",
+    "@hapi/jwt": "^3.2.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "joi": "^17.13.3",
+    "nanoid": "^3.1.23",
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.3",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "hapi-swagger": "^17.3.2",
+    "node-pg-migrate": "^7.9.1"
+  }
+}
