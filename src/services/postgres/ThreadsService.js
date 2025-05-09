@@ -8,12 +8,15 @@ class ThreadsService {
   constructor() {
     this._pool = new Pool({
       connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     });
   }
 
   async addThreads({ userId, title, content, imageUrl }) {
     const id = `threads-${nanoid(16)}`;
-    const createdAt = new Date().toISOString;
+    const createdAt = new Date().toISOString();
 
     const query = {
       text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
