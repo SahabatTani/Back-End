@@ -3,12 +3,16 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const path = require('path');
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
 const HapiSwagger = require('hapi-swagger');
 const Package = require('../package.json');
 
 const ClientError = require('./exceptions/ClientError');
+
+// storage
+const StorageService = require('./services/storage/StorageService');
 
 // users
 const users = require('./api/users');
@@ -21,9 +25,18 @@ const AuthentiacationsService = require('./services/postgres/AuthenticationsServ
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
 
+// threads
+const threads = require('./api/threads');
+const ThreadsService = require('./services/postgres/ThreadsService');
+const ThreadsValidator = require('./validator/threads');
+
 const init = async () => {
+  const storageService = new StorageService(
+    path.resolve(__dirname, 'api/uploads/file/images'),
+  );
   const usersService = new UsersService();
   const authenticationsService = new AuthentiacationsService();
+  const threadsService = new ThreadsService();
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -38,6 +51,9 @@ const init = async () => {
   await server.register([
     {
       plugin: Jwt,
+    },
+    {
+      plugin: Inert,
     },
   ]);
 
@@ -83,6 +99,14 @@ const init = async () => {
         usersService,
         tokenManager: TokenManager,
         validator: AuthenticationsValidator,
+      },
+    },
+    {
+      plugin: threads,
+      options: {
+        threadsService,
+        storageService,
+        validator: ThreadsValidator,
       },
     },
   ]);
