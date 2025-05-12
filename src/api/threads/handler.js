@@ -7,6 +7,8 @@ class ThreadsHandler {
     this._validator = validator;
 
     this.postThreadsHandler = this.postThreadsHandler.bind(this);
+    this.getThreadsHandler = this.getThreadsHandler.bind(this);
+    this.deleteThreadsByIdHandler = this.deleteThreadsByIdHandler.bind(this);
   }
 
   async postThreadsHandler(request, h) {
@@ -42,6 +44,27 @@ class ThreadsHandler {
     });
     response.code(201);
     return response;
+  }
+
+  async getThreadsHandler() {
+    const threads = await this._service.getThreads();
+    return {
+      status: 'success',
+      data: {
+        threads,
+      },
+    };
+  }
+
+  async deleteThreadsByIdHandler(request) {
+    const { threadId } = request.params;
+
+    await this._service.deleteThreadsById(threadId);
+
+    return {
+      status: 'success',
+      message: 'Thread berhasil dihapus',
+    };
   }
 }
 

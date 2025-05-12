@@ -2,16 +2,12 @@
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 const InvariantError = require('../../exceptions/InvariantError');
+const NotFoundError = require('../../exceptions/NotFoundError');
 
 /* eslint-disable no-underscore-dangle */
 class ThreadsService {
   constructor() {
-    this._pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    });
+    this._pool = new Pool();
   }
 
   async addThreads({ userId, title, content, imageUrl }) {
@@ -30,6 +26,35 @@ class ThreadsService {
     }
 
     return result.rows[0].id;
+  }
+
+  async getThreads() {
+    try {
+      const query = `
+        SELECT id, user_id, title, content, created_at, image_url
+        FROM threads
+        ORDER BY created_at DESC
+      `;
+
+      const result = await this._pool.query(query);
+
+      return result.rows;
+    } catch (error) {
+      throw new InvariantError('Gagal mengambil data threads');
+    }
+  }
+
+  async deleteThreadsById(threadId) {
+    const query = {
+      text: 'DELETE FROM threads WHERE id = $1 RETURNING id',
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Threads gagal dihapus. Id tidak ditemukan');
+    }
   }
 }
 

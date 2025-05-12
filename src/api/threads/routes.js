@@ -13,6 +13,19 @@ const routes = (handler) => [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/threads',
+    handler: handler.getThreadsHandler,
+  },
+  {
+    method: 'DELETE',
+    path: '/threads/{threadId}',
+    handler: handler.deleteThreadsByIdHandler,
+    options: {
+      auth: 'sahabattani_jwt',
+    },
+  },
 ];
 
 module.exports = routes;
