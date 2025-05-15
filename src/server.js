@@ -111,19 +111,6 @@ const init = async () => {
     },
   ]);
 
-  // Menyajikan gambar dari folder uploads
-  server.route({
-    method: 'GET',
-    path: '/images/threads/{filename}',
-    handler: {
-      directory: {
-        path: path.resolve(__dirname, 'api/uploads/file/images'),
-        redirectToSlash: true,
-        index: false,
-      },
-    },
-  });
-
   server.ext('onPreResponse', (request, h) => {
     const { response } = request;
 

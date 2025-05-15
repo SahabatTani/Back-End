@@ -13,6 +13,7 @@
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
     "@hapi/jwt": "^3.2.0",
+    "@supabase/supabase-js": "^2.49.4",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "joi": "^17.13.3",

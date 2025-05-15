@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-underscore-dangle */
 const { nanoid } = require('nanoid');
@@ -12,14 +13,14 @@ class UsersService {
     this._pool = new Pool();
   }
 
-  async addUser({ username, password, fullname }) {
+  async addUser({ username, email, password, fullname }) {
     await this.verifyNewUsername(username);
 
     const id = `user-${nanoid(16)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
-      values: [id, username, hashedPassword, fullname],
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5) RETURNING id',
+      values: [id, username, email, hashedPassword, fullname],
     };
 
     const result = await this._pool.query(query);
@@ -61,10 +62,10 @@ class UsersService {
     return result.rows[0];
   }
 
-  async verifyUserCredential(username, password) {
+  async verifyUserCredential(identifier, password) {
     const query = {
-      text: 'SELECT id, password FROM users WHERE username = $1',
-      values: [username],
+      text: 'SELECT id, password FROM users WHERE username = $1 OR email = $1',
+      values: [identifier],
     };
 
     const result = await this._pool.query(query);

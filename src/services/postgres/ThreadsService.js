@@ -19,13 +19,17 @@ class ThreadsService {
       values: [id, userId, title, content, createdAt, imageUrl],
     };
 
-    const result = await this._pool.query(query);
+    try {
+      const result = await this._pool.query(query);
 
-    if (!result.rows[0].id) {
-      throw new InvariantError('Threads gagal ditambahkan');
+      if (!result.rows[0].id) {
+        throw new InvariantError('Threads gagal ditambahkan');
+      }
+
+      return result.rows[0].id;
+    } catch (error) {
+      throw new InvariantError('Gagal menambahkan thread');
     }
-
-    return result.rows[0].id;
   }
 
   async getThreads() {

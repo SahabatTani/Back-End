@@ -19,6 +19,11 @@ exports.up = (pgm) => {
       unique: true,
       notNull: true,
     },
+    email: {
+      type: 'VARCHAR(100)',
+      unique: true,
+      notNull: true,
+    },
     password: {
       type: 'TEXT',
       notNull: true,

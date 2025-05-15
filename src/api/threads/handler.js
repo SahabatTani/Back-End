@@ -20,12 +20,20 @@ class ThreadsHandler {
 
     if (request.payload.file) {
       const { file } = request.payload;
-      const filename = await this._storageService.writeFile(
-        file,
-        file.hapi,
-        userId
-      );
-      imageUrl = `http://${process.env.HOST}:${process.env.PORT}/images/threads/${filename}`;
+      try {
+        imageUrl = await this._storageService.writeFile(
+          file,
+          file.hapi,
+          userId
+        );
+      } catch (err) {
+        return h
+          .response({
+            status: 'fail',
+            message: `Gagal mengunggah gambar: ${err.message}`,
+          })
+          .code(500);
+      }
     }
 
     const threadId = await this._service.addThreads({

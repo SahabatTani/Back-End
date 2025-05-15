@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
 class UsersHandler {
   constructor(service, validator) {
@@ -10,10 +11,11 @@ class UsersHandler {
 
   async postUserHandler(request, h) {
     this._validator.validateUserPayload(request.payload);
-    const { username, password, fullname } = request.payload;
+    const { username, email, password, fullname } = request.payload;
 
     const userId = await this._service.addUser({
       username,
+      email,
       password,
       fullname,
     });
