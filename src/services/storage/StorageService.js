@@ -9,17 +9,17 @@ class StorageService {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_KEY
     );
-    this._bucketName = 'threads';
+    this._bucketName = 'images';
   }
 
-  async writeFile(file, meta, userId) {
+  async writeFile(file, meta, userId, path) {
     try {
       const filename = `${Date.now()}_${userId}_${meta.filename}`;
       const buffer = await this._streamToBuffer(file);
 
       const { error } = await this._supabase.storage
         .from(this._bucketName)
-        .upload(`images/${filename}`, buffer, {
+        .upload(`${path}/${filename}`, buffer, {
           contentType: meta.headers['content-type'],
           upsert: true,
         });
@@ -30,7 +30,7 @@ class StorageService {
 
       const { data } = this._supabase.storage
         .from(this._bucketName)
-        .getPublicUrl(`images/${filename}`);
+        .getPublicUrl(`${path}/${filename}`);
 
       return data.publicUrl;
     } catch (error) {
@@ -38,7 +38,20 @@ class StorageService {
     }
   }
 
-  // Mengubah stream menjadi buffer
+  async deleteFile(filePath) {
+    try {
+      const { error } = await this._supabase.storage
+        .from(this._bucketName)
+        .remove([filePath]);
+
+      if (error) {
+        throw new Error(`Gagal menghapus file: ${error.message}`);
+      }
+    } catch (error) {
+      throw new Error(`Gagal menghapus file: ${error.message}`);
+    }
+  }
+
   _streamToBuffer(stream) {
     return new Promise((resolve, reject) => {
       const chunks = [];

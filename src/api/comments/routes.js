@@ -1,8 +1,8 @@
 const routes = (handler) => [
   {
     method: 'POST',
-    path: '/threads',
-    handler: handler.postThreadsHandler,
+    path: '/comments/{threadId}',
+    handler: handler.postCommentsHandler,
     options: {
       auth: 'sahabattani_jwt',
       payload: {
@@ -14,19 +14,9 @@ const routes = (handler) => [
     },
   },
   {
-    method: 'GET',
-    path: '/threads',
-    handler: handler.getThreadsHandler,
-  },
-  {
-    method: 'GET',
-    path: '/threads/{keyword}',
-    handler: handler.getThreadsByKeywordHandler,
-  },
-  {
     method: 'DELETE',
-    path: '/threads/{threadId}',
-    handler: handler.deleteThreadsByIdHandler,
+    path: '/comments/{commentId}',
+    handler: handler.deleteCommentsByIdHandler,
     options: {
       auth: 'sahabattani_jwt',
     },

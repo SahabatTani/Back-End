@@ -1,13 +1,14 @@
+/* eslint-disable import/order */
+/* eslint-disable import/no-useless-path-segments */
 /* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config();
 
+const apiDocs = require('./../src/api/apiDocs');
+
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
-const path = require('path');
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
-const HapiSwagger = require('hapi-swagger');
-const Package = require('../package.json');
 
 const ClientError = require('./exceptions/ClientError');
 
@@ -21,7 +22,7 @@ const UsersValidator = require('./validator/users');
 
 // authentications
 const authentications = require('./api/authentications');
-const AuthentiacationsService = require('./services/postgres/AuthenticationsService');
+const AuthenticationsService = require('./services/postgres/AuthenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
 
@@ -30,13 +31,17 @@ const threads = require('./api/threads');
 const ThreadsService = require('./services/postgres/ThreadsService');
 const ThreadsValidator = require('./validator/threads');
 
+// comments
+const comments = require('./api/comments');
+const CommentsService = require('./services/postgres/CommentsService');
+const CommentsValidator = require('./validator/comments');
+
 const init = async () => {
-  const storageService = new StorageService(
-    path.resolve(__dirname, 'api/uploads/file/images'),
-  );
+  const storageService = new StorageService();
   const usersService = new UsersService();
-  const authenticationsService = new AuthentiacationsService();
-  const threadsService = new ThreadsService();
+  const authenticationsService = new AuthenticationsService();
+  const threadsService = new ThreadsService(storageService);
+  const commentsService = new CommentsService(storageService);
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -77,15 +82,6 @@ const init = async () => {
     Inert,
     Vision,
     {
-      plugin: HapiSwagger,
-      options: {
-        info: {
-          title: 'Sahabat Tani API Documentation',
-          version: Package.version,
-        },
-      },
-    },
-    {
       plugin: users,
       options: {
         service: usersService,
@@ -109,7 +105,17 @@ const init = async () => {
         validator: ThreadsValidator,
       },
     },
+    {
+      plugin: comments,
+      options: {
+        commentsService,
+        storageService,
+        validator: CommentsValidator,
+      },
+    },
   ]);
+
+  server.route(apiDocs);
 
   server.ext('onPreResponse', (request, h) => {
     const { response } = request;

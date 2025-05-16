@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
@@ -6,8 +7,9 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 
 /* eslint-disable no-underscore-dangle */
 class ThreadsService {
-  constructor() {
+  constructor(storageService) {
     this._pool = new Pool();
+    this._storageService = storageService;
   }
 
   async addThreads({ userId, title, content, imageUrl }) {
@@ -35,29 +37,118 @@ class ThreadsService {
   async getThreads() {
     try {
       const query = `
-        SELECT id, user_id, title, content, created_at, image_url
-        FROM threads
-        ORDER BY created_at DESC
-      `;
+      SELECT 
+        t.id, 
+        u.fullname,
+        t.title, 
+        t.content, 
+        t.created_at, 
+        t.image_url,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', c.id,
+              'fullname', commenter.fullname,
+              'content', c.content,
+              'image_url', c.image_url,
+              'created_at', c.created_at
+            ) ORDER BY c.created_at DESC
+          ) FILTER (WHERE c.id IS NOT NULL), 
+          '[]'::json
+        ) AS comments
+      FROM threads t
+      JOIN users u ON u.id = t.user_id
+      LEFT JOIN comments c ON t.id = c.thread_id
+      LEFT JOIN users commenter ON commenter.id = c.user_id
+      GROUP BY t.id, u.fullname
+      ORDER BY t.created_at DESC;
+    `;
+
+      const result = await this._pool.query(query);
+      return result.rows;
+    } catch (error) {
+      throw new InvariantError(
+        `Gagal mengambil data threads: ${error.message}`
+      );
+    }
+  }
+
+  async getThreadsByKeyword(keyword) {
+    try {
+      const query = {
+        text: `
+        SELECT 
+          t.id, 
+          u.fullname, 
+          t.title, 
+          t.content, 
+          t.created_at, 
+          t.image_url,
+          COALESCE(
+            json_agg(
+              json_build_object(
+                'id', c.id,
+                'fullname', commenter.fullname,
+                'content', c.content,
+                'image_url', c.image_url,
+                'created_at', c.created_at
+              ) ORDER BY c.created_at DESC
+            ) FILTER (WHERE c.id IS NOT NULL), 
+            '[]'::json
+          ) AS comments
+        FROM threads t
+        JOIN users u ON u.id = t.user_id
+        LEFT JOIN comments c ON t.id = c.thread_id
+        LEFT JOIN users commenter ON commenter.id = c.user_id
+        WHERE t.title ILIKE $1 OR t.content ILIKE $1
+        GROUP BY t.id, u.fullname
+        ORDER BY t.created_at DESC;
+      `,
+        values: [`%${keyword}%`],
+      };
 
       const result = await this._pool.query(query);
 
       return result.rows;
     } catch (error) {
-      throw new InvariantError('Gagal mengambil data threads');
+      throw new InvariantError(`Gagal mencari data threads: ${error.message}`);
     }
   }
 
   async deleteThreadsById(threadId) {
-    const query = {
+    const getImageQuery = {
+      text: 'SELECT image_url FROM threads WHERE id = $1',
+      values: [threadId],
+    };
+
+    const deleteThreadQuery = {
       text: 'DELETE FROM threads WHERE id = $1 RETURNING id',
       values: [threadId],
     };
 
-    const result = await this._pool.query(query);
+    try {
+      const imageResult = await this._pool.query(getImageQuery);
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Threads gagal dihapus. Id tidak ditemukan');
+      if (!imageResult.rows.length) {
+        throw new NotFoundError('Threads tidak ditemukan');
+      }
+
+      const imageUrl = imageResult.rows[0].image_url;
+
+      const result = await this._pool.query(deleteThreadQuery);
+
+      if (!result.rows.length) {
+        throw new NotFoundError('Threads gagal dihapus');
+      }
+
+      if (imageUrl) {
+        const filePath = imageUrl.split(
+          `/storage/v1/object/public/${this._storageService._bucketName}/`
+        )[1];
+        await this._storageService.deleteFile(filePath);
+      }
+    } catch (error) {
+      throw new InvariantError(`Gagal menghapus thread: ${error.message}`);
     }
   }
 }

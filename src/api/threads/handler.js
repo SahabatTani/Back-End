@@ -8,6 +8,7 @@ class ThreadsHandler {
 
     this.postThreadsHandler = this.postThreadsHandler.bind(this);
     this.getThreadsHandler = this.getThreadsHandler.bind(this);
+    this.getThreadsByKeywordHandler = this.getThreadsByKeywordHandler.bind(this);
     this.deleteThreadsByIdHandler = this.deleteThreadsByIdHandler.bind(this);
   }
 
@@ -24,7 +25,8 @@ class ThreadsHandler {
         imageUrl = await this._storageService.writeFile(
           file,
           file.hapi,
-          userId
+          userId,
+          'threads'
         );
       } catch (err) {
         return h
@@ -56,6 +58,17 @@ class ThreadsHandler {
 
   async getThreadsHandler() {
     const threads = await this._service.getThreads();
+    return {
+      status: 'success',
+      data: {
+        threads,
+      },
+    };
+  }
+
+  async getThreadsByKeywordHandler(request) {
+    const { keyword } = request.params;
+    const threads = await this._service.getThreadsByKeyword(keyword);
     return {
       status: 'success',
       data: {

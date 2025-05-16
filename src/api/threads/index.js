@@ -7,11 +7,11 @@ module.exports = {
   name: 'threads',
   version: '1.0.0',
   register: async (server, { threadsService, storageService, validator }) => {
-    const thradsHandler = new ThreadsHandler(
+    const threadsHandler = new ThreadsHandler(
       threadsService,
       storageService,
       validator
     );
-    server.route(routes(thradsHandler));
+    server.route(routes(threadsHandler));
   },
 };
