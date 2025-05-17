@@ -75,7 +75,7 @@ const routes = [
   <div class="container">
     <div class="header">
       <h1>Sahabat Tani API Documentation</h1>
-      <div class="base-url">Base URL: <code>https://api.sahabattani.com</code></div>
+      <div class="base-url">Base URL: <code>https://sahabattani.up.railway.app/</code></div>
     </div>
 
     <div class="route">
