@@ -8,6 +8,7 @@ class ThreadsHandler {
 
     this.postThreadsHandler = this.postThreadsHandler.bind(this);
     this.getThreadsHandler = this.getThreadsHandler.bind(this);
+    this.getThreadByIdHandler = this.getThreadByIdHandler.bind(this);
     this.getThreadsByKeywordHandler = this.getThreadsByKeywordHandler.bind(this);
     this.deleteThreadsByIdHandler = this.deleteThreadsByIdHandler.bind(this);
   }
@@ -62,6 +63,19 @@ class ThreadsHandler {
       status: 'success',
       data: {
         threads,
+      },
+    };
+  }
+
+  async getThreadByIdHandler(request) {
+    const { threadId } = request.params;
+
+    const thread = await this._service.getThreadsById(threadId);
+
+    return {
+      status: 'success',
+      data: {
+        thread,
       },
     };
   }

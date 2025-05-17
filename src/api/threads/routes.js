@@ -20,7 +20,12 @@ const routes = (handler) => [
   },
   {
     method: 'GET',
-    path: '/threads/{keyword}',
+    path: '/threads/{threadId}',
+    handler: handler.getThreadByIdHandler,
+  },
+  {
+    method: 'GET',
+    path: '/threads/search/{keyword}',
     handler: handler.getThreadsByKeywordHandler,
   },
   {

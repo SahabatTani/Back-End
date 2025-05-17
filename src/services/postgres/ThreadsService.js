@@ -44,6 +44,34 @@ class ThreadsService {
         t.content, 
         t.created_at, 
         t.image_url,
+        COUNT(c.id) AS total_comments
+      FROM threads t
+      JOIN users u ON u.id = t.user_id
+      LEFT JOIN comments c ON t.id = c.thread_id
+      GROUP BY t.id, u.fullname
+      ORDER BY t.created_at DESC;
+    `;
+
+      const result = await this._pool.query(query);
+      return result.rows;
+    } catch (error) {
+      throw new InvariantError(
+        `Gagal mengambil data threads: ${error.message}`
+      );
+    }
+  }
+
+  async getThreadsById(threadId) {
+    try {
+      const query = {
+        text: `
+      SELECT 
+        t.id, 
+        u.fullname,
+        t.title, 
+        t.content, 
+        t.created_at, 
+        t.image_url,
         COALESCE(
           json_agg(
             json_build_object(
@@ -60,16 +88,22 @@ class ThreadsService {
       JOIN users u ON u.id = t.user_id
       LEFT JOIN comments c ON t.id = c.thread_id
       LEFT JOIN users commenter ON commenter.id = c.user_id
+      WHERE t.id = $1
       GROUP BY t.id, u.fullname
-      ORDER BY t.created_at DESC;
-    `;
+      LIMIT 1;
+      `,
+        values: [threadId],
+      };
 
       const result = await this._pool.query(query);
-      return result.rows;
+
+      if (!result.rows.length) {
+        throw new NotFoundError('Thread tidak ditemukan');
+      }
+
+      return result.rows[0];
     } catch (error) {
-      throw new InvariantError(
-        `Gagal mengambil data threads: ${error.message}`
-      );
+      throw new InvariantError(`Gagal mengambil thread: ${error.message}`);
     }
   }
 

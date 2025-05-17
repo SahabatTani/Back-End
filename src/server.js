@@ -84,7 +84,9 @@ const init = async () => {
     {
       plugin: users,
       options: {
-        service: usersService,
+        usersService,
+        authenticationsService,
+        tokenManager: TokenManager,
         validator: UsersValidator,
       },
     },

@@ -1,8 +1,10 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-underscore-dangle */
 class UsersHandler {
-  constructor(service, validator) {
-    this._service = service;
+  constructor(usersService, authenticationsService, tokenManager, validator) {
+    this._usersService = usersService;
+    this._authenticationsService = authenticationsService;
+    this._tokenManager = tokenManager;
     this._validator = validator;
 
     this.postUserHandler = this.postUserHandler.bind(this);
@@ -13,18 +15,35 @@ class UsersHandler {
     this._validator.validateUserPayload(request.payload);
     const { username, email, password, fullname } = request.payload;
 
-    const userId = await this._service.addUser({
+    const userId = await this._usersService.addUser({
       username,
       email,
       password,
       fullname,
     });
 
+    const userData = await this._usersService.getUserById(userId);
+
+    const user = {
+      username: userData.username,
+      email: userData.email,
+      fullname: userData.fullname,
+    };
+
+    const accessToken = this._tokenManager.generateAccessToken({ id: userId });
+    const refreshToken = this._tokenManager.generateRefreshToken({
+      id: userId,
+    });
+
+    await this._authenticationsService.addRefreshToken(refreshToken);
+
     const response = h.response({
       status: 'success',
       message: 'User berhasil ditambahkan',
       data: {
-        userId,
+        user,
+        accessToken,
+        refreshToken,
       },
     });
     response.code(201);
@@ -32,8 +51,14 @@ class UsersHandler {
   }
 
   async getUserByIdHandler(request) {
-    const { id } = request.params;
-    const user = await this._service.getUserById(id);
+    const { id } = request.auth.credentials;
+    const userData = await this._usersService.getUserById(id);
+
+    const user = {
+      username: userData.username,
+      email: userData.email,
+      fullname: userData.fullname,
+    };
 
     return {
       status: 'success',

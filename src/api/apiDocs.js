@@ -90,28 +90,38 @@ const routes = [
 }</pre>
       <strong>Response:</strong>
       <pre>{
-  "status": "success",
-  "message": "User berhasil ditambahkan",
-  "data": {
-    "userId": "user-123"
-  }
+    "status": "success",
+    "message": "User berhasil ditambahkan",
+    "data": {
+        "user": {
+            "username": "broxy",
+            "email": "broxy@gmail.com",
+            "fullname": "John Doe"
+        },
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItMDdsN3otekFkWHBkbEVCYSIsImlhdCI6MTc0NzQ1NDg3MX0.YZTfZbJF32JYvJ4i5uRcJrmqykMsrGOohGT8KS5AVBw",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItMDdsN3otekFkWHBkbEVCYSIsImlhdCI6MTc0NzQ1NDg3MX0.xmTDoIc31RjdNaEiw5alyXugMUPVJXgwXNREPOnhfo4"
+    }
 }</pre>
     </div>
 
     <div class="route">
-      <h2>GET /users/{id}</h2>
-      <p>Mengambil detail user berdasarkan ID.</p>
+      <h2>GET /users</h2>
+      <p>Mengambil detail user menggunakan access token</p>
+      <strong>Headers:</strong>
+      <pre>
+Authorization: Bearer &lt;accessToken&gt;
+Content-Type: multipart/form-data
+      </pre>
       <strong>Response:</strong>
       <pre>{
-  "status": "success",
-  "data": {
-    "user": {
-      "id": "user-123",
-      "username": "string",
-      "email": "string",
-      "fullname": "string"
+    "status": "success",
+    "data": {
+        "user": {
+            "username": "brox",
+            "email": "brox@gmail.com",
+            "fullname": "John Doe"
+        }
     }
-  }
 }</pre>
     </div>
 
@@ -204,6 +214,28 @@ Content-Type: multipart/form-data
                 "content": "TES",
                 "created_at": "2025-05-16T01:25:17.854Z",
                 "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/threads/1747358716841_user-td2T-hU6BUuW5z8i_picture-small.jpg",
+                "total_comments": "0"
+            }
+        ]
+  }
+}</pre>
+    </div>
+
+    <div class="route">
+      <h2>GET /threads/{threadId}</h2>
+      <p>Mendapatkan threads berdasarkarkan id thread</p>
+      <strong>Response:</strong>
+      <pre>{
+  "status": "success",
+  "data": {
+    "threads": [
+            {
+                "id": "threads-nyJ-BbqBMhXHi2m-",
+                "fullname": "John Doe",
+                "title": "TESSUPABASE",
+                "content": "TES",
+                "created_at": "2025-05-16T01:25:17.854Z",
+                "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/threads/1747358716841_user-td2T-hU6BUuW5z8i_picture-small.jpg",
                 "comments": [
                   {
                         "id": "comment-p-T7gg3Kolq4fJRz",
@@ -220,7 +252,7 @@ Content-Type: multipart/form-data
     </div>
 
     <div class="route">
-      <h2>GET /threads/{keyword}</h2>
+      <h2>GET /threads/search/{keyword}</h2>
       <p>Mendapatkan semua threads berdasarkan keyword</p>
       <strong>Response:</strong>
       <pre>{
