@@ -225,30 +225,30 @@ Content-Type: multipart/form-data
       <h2>GET /threads/{threadId}</h2>
       <p>Mendapatkan threads berdasarkarkan id thread</p>
       <strong>Response:</strong>
-      <pre>{
-  "status": "success",
-  "data": {
-    "threads": [
-            {
-                "id": "threads-nyJ-BbqBMhXHi2m-",
-                "fullname": "John Doe",
-                "title": "TESSUPABASE",
-                "content": "TES",
-                "created_at": "2025-05-16T01:25:17.854Z",
-                "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/threads/1747358716841_user-td2T-hU6BUuW5z8i_picture-small.jpg",
-                "comments": [
-                  {
-                        "id": "comment-p-T7gg3Kolq4fJRz",
-                        "fullname": "John Doe",
-                        "content": "TES",
-                        "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/comments/1747358982867_user-td2T-hU6BUuW5z8i_picture-small.jpg",
-                        "created_at": "2025-05-16T01:29:44.328Z"
-                    }
-                ]
-            }
-        ]
-  }
-}</pre>
+      <pre>
+      {
+    "status": "success",
+    "data": {
+        "thread": {
+            "id": "threads-nyJ-BbqBMhXHi2m-",
+            "fullname": "John Doe",
+            "title": "TESSUPABASE",
+            "content": "TES",
+            "created_at": "2025-05-16T01:25:17.854Z",
+            "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/threads/1747358716841_user-td2T-hU6BUuW5z8i_picture-small.jpg",
+            "comments": [
+                {
+                    "id": "comment-iHzMTSZBzwcT5n3A",
+                    "fullname": "John Doe",
+                    "content": "TES",
+                    "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/comments/1747456610359_user-oomMUxOR2Hbupi-X_picture-small.jpg",
+                    "created_at": "2025-05-17T04:36:51.066Z"
+                }
+            ]
+        }
+    }
+}
+      </pre>
     </div>
 
     <div class="route">
