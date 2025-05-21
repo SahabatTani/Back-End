@@ -225,8 +225,7 @@ Content-Type: multipart/form-data
       <h2>GET /threads/{threadId}</h2>
       <p>Mendapatkan threads berdasarkarkan id thread</p>
       <strong>Response:</strong>
-      <pre>
-      {
+      <pre>{
     "status": "success",
     "data": {
         "thread": {
@@ -247,8 +246,7 @@ Content-Type: multipart/form-data
             ]
         }
     }
-}
-      </pre>
+}</pre>
     </div>
 
     <div class="route">
