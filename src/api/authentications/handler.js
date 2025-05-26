@@ -28,10 +28,19 @@ class AuthenticationsHandler {
 
     await this._authenticationsService.addRefreshToken(refreshToken);
 
+    const userData = await this._usersService.getUserById(id);
+
+    const user = {
+      username: userData.username,
+      email: userData.email,
+      fullname: userData.fullname,
+    };
+
     const response = h.response({
       status: 'success',
       message: 'Authentication berhasil ditambahkan',
       data: {
+        user,
         accessToken,
         refreshToken,
       },

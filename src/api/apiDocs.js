@@ -138,8 +138,13 @@ Content-Type: multipart/form-data
   "status": "success",
   "message": "Authentication berhasil ditambahkan",
   "data": {
-    "accessToken": "string",
-    "refreshToken": "string"
+        "user": {
+            "username": "broxy",
+            "email": "broxy@gmail.com",
+            "fullname": "John Doe"
+        },
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItMDdsN3otekFkWHBkbEVCYSIsImlhdCI6MTc0NzQ1NDg3MX0.YZTfZbJF32JYvJ4i5uRcJrmqykMsrGOohGT8KS5AVBw",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItMDdsN3otekFkWHBkbEVCYSIsImlhdCI6MTc0NzQ1NDg3MX0.xmTDoIc31RjdNaEiw5alyXugMUPVJXgwXNREPOnhfo4"
   }
 }</pre>
     </div>
@@ -210,6 +215,7 @@ Content-Type: multipart/form-data
             {
                 "id": "threads-nyJ-BbqBMhXHi2m-",
                 "fullname": "John Doe",
+                "username": "jono",
                 "title": "TESSUPABASE",
                 "content": "TES",
                 "created_at": "2025-05-16T01:25:17.854Z",
@@ -231,6 +237,7 @@ Content-Type: multipart/form-data
         "thread": {
             "id": "threads-nyJ-BbqBMhXHi2m-",
             "fullname": "John Doe",
+            "username": "jono",
             "title": "TESSUPABASE",
             "content": "TES",
             "created_at": "2025-05-16T01:25:17.854Z",
@@ -239,6 +246,7 @@ Content-Type: multipart/form-data
                 {
                     "id": "comment-iHzMTSZBzwcT5n3A",
                     "fullname": "John Doe",
+                    "username": "jono",
                     "content": "TES",
                     "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/comments/1747456610359_user-oomMUxOR2Hbupi-X_picture-small.jpg",
                     "created_at": "2025-05-17T04:36:51.066Z"
@@ -260,6 +268,7 @@ Content-Type: multipart/form-data
             {
                 "id": "threads-nyJ-BbqBMhXHi2m-",
                 "fullname": "John Doe",
+                "username": "jono",
                 "title": "TESSUPABASE",
                 "content": "TES",
                 "created_at": "2025-05-16T01:25:17.854Z",
@@ -268,6 +277,7 @@ Content-Type: multipart/form-data
                   {
                         "id": "comment-p-T7gg3Kolq4fJRz",
                         "fullname": "John Doe",
+                        "username": "jono",
                         "content": "TES",
                         "image_url": "https://rupjluzedowyokazodad.supabase.co/storage/v1/object/public/images/comments/1747358982867_user-td2T-hU6BUuW5z8i_picture-small.jpg",
                         "created_at": "2025-05-16T01:29:44.328Z"

@@ -40,6 +40,7 @@ class ThreadsService {
       SELECT 
         t.id, 
         u.fullname,
+        u.username,
         t.title, 
         t.content, 
         t.created_at, 
@@ -48,7 +49,7 @@ class ThreadsService {
       FROM threads t
       JOIN users u ON u.id = t.user_id
       LEFT JOIN comments c ON t.id = c.thread_id
-      GROUP BY t.id, u.fullname
+      GROUP BY t.id, u.fullname, u.username
       ORDER BY t.created_at DESC;
     `;
 
@@ -68,6 +69,7 @@ class ThreadsService {
       SELECT 
         t.id, 
         u.fullname,
+        u.username,
         t.title, 
         t.content, 
         t.created_at, 
@@ -77,6 +79,7 @@ class ThreadsService {
             json_build_object(
               'id', c.id,
               'fullname', commenter.fullname,
+              'username', commenter.username,
               'content', c.content,
               'image_url', c.image_url,
               'created_at', c.created_at
@@ -89,7 +92,7 @@ class ThreadsService {
       LEFT JOIN comments c ON t.id = c.thread_id
       LEFT JOIN users commenter ON commenter.id = c.user_id
       WHERE t.id = $1
-      GROUP BY t.id, u.fullname
+      GROUP BY t.id, u.fullname, u.username
       LIMIT 1;
       `,
         values: [threadId],
@@ -114,6 +117,7 @@ class ThreadsService {
         SELECT 
           t.id, 
           u.fullname, 
+          u.username,
           t.title, 
           t.content, 
           t.created_at, 
@@ -123,6 +127,7 @@ class ThreadsService {
               json_build_object(
                 'id', c.id,
                 'fullname', commenter.fullname,
+                'username', commenter.username,
                 'content', c.content,
                 'image_url', c.image_url,
                 'created_at', c.created_at
@@ -135,7 +140,7 @@ class ThreadsService {
         LEFT JOIN comments c ON t.id = c.thread_id
         LEFT JOIN users commenter ON commenter.id = c.user_id
         WHERE t.title ILIKE $1 OR t.content ILIKE $1
-        GROUP BY t.id, u.fullname
+        GROUP BY t.id, u.fullname, u.username
         ORDER BY t.created_at DESC;
       `,
         values: [`%${keyword}%`],
