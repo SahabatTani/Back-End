@@ -13,6 +13,7 @@ Sahabat Tani adalah layanan backend untuk aplikasi pertanian yang menyediakan be
 - Hapi.js
 - PostgreSQL
 - Railway (Deployment)
+- Supabase (Cloud Storage)
 - dotenv (Environment Configuration)
 
 ---
