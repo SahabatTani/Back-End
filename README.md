@@ -1,6 +1,6 @@
 # 🌾 Sahabat Tani - Backend API
 
-Sahabat Tani adalah layanan backend untuk aplikasi pertanian yang menyediakan berbagai fitur seperti manajemen produk, pengguna, dan interaksi antar petani. Backend ini dibangun menggunakan **Node.js**, **Hapi.js**, dan **PostgreSQL**.
+Sahabat Tani adalah layanan backend untuk aplikasi pertanian yang menyediakan berbagai fitur seperti deteksi penyakit pada tanaman pertanian, melihat riwayat deteksi penyakit,melihat peta persebaran penyakit disekitar, pencegahan dan solusi penyakit pada tanaman serta interaksi antar petani melalui forum diskusi. Backend ini dibangun menggunakan **Node.js**, **Hapi.js**, dan **PostgreSQL**.
 
 🚀 **Production URL:**  
 [https://sahabattani.up.railway.app](https://sahabattani.up.railway.app)
@@ -36,35 +36,25 @@ npm install
 
 ### 3. Konfigurasi Environment Variables
 
-Buat file `.env` berdasarkan `.env.example`:
-
-```bash
-cp .env.example .env
-```
+Buat file `.env` 
 
 Isi file `.env` sesuai dengan konfigurasi lokal kamu:
 
 ```
 PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_NAME=sahabat_tani_db
-JWT_SECRET=your_jwt_secret
+PGUSER=developer
+PGHOST=localhost
+PGPASSWORD=yourpassword
+PGDATABASE=yourdatabase
+PGPORT=5432
+SUPABASE_URL=supabaseurl
+SUPABASE_KEY=supabasekey
+ACCESS_TOKEN_KEY=accesstokenkey
+REFRESH_TOKEN_KEY=refreshtokenkey
+ACCESS_TOKEN_AGE=1296000
 ```
 
-### 4. Setup Database
-
-Pastikan PostgreSQL sudah berjalan, lalu jalankan migrasi dan seeding (jika tersedia):
-
-```bash
-npx sequelize db:create
-npx sequelize db:migrate
-npx sequelize db:seed:all
-```
-
-### 5. Jalankan Aplikasi
+### 4. Jalankan Aplikasi
 
 ```bash
 npm run start
