@@ -1,6 +1,6 @@
 # 🌾 Sahabat Tani - Backend API
 
-Sahabat Tani adalah layanan backend untuk aplikasi pertanian yang menyediakan berbagai fitur seperti deteksi penyakit pada tanaman pertanian, melihat riwayat deteksi penyakit,melihat peta persebaran penyakit disekitar, pencegahan dan solusi penyakit pada tanaman serta interaksi antar petani melalui forum diskusi. Backend ini dibangun menggunakan **Node.js**, **Hapi.js**, dan **PostgreSQL**.
+Layanan backend untuk aplikasi Sahabat Tani yang menyediakan berbagai fitur seperti deteksi penyakit pada tanaman pertanian, melihat riwayat deteksi penyakit,melihat peta persebaran penyakit disekitar, pencegahan dan solusi penyakit pada tanaman serta interaksi antar petani melalui forum diskusi. Backend ini dibangun menggunakan **Node.js**, **Hapi.js**, dan **PostgreSQL**.
 
 🚀 **Production URL:**  
 [https://sahabattani.up.railway.app](https://sahabattani.up.railway.app)
